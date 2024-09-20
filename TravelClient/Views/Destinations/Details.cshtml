@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = $"Details for {@Model.DestinationName}";
+}
+
+
+<h1>All about: @Model.Destination</h1>
+
+<p>This Destination was created by: @Model.UserName</p>
+<br />
+<p><strong>Country user lives in: </strong> @Model.Country</p>
+<p><strong>The Destination Name is: </strong> @Model.DestinationName</p>
+<p><strong>Destination's Review: </strong> @Model.Review </p>
+<p><strong>Destination's Overall Rating: </strong> @Model.OverallRating</p>
+
+<br />
+<p>@Html.ActionLink("Edit details", "Edit", new { id = @Model.DestinationId})</p>
+<p>@Html.ActionLink("Delete Destination", "Delete", new { id = @Model.DestinationId})</p>
+<p>@Html.ActionLink("Return to all Destinations", "Index")</p>
