@@ -12,10 +12,18 @@ public class ApiHelper
 {
     public static async Task<string> GetAll()
     {
-        RestClient client = new RestClient("http://localhost:5181/");
+        // Update this to the correct API URL
+        RestClient client = new  RestClient("https://localhost:7220"); // Updated to use HTTPS and correct port
         RestRequest request = new RestRequest($"api/destinations", Method.Get);
         RestResponse response = await client.GetAsync(request);
+         // Log the response content
+        if (string.IsNullOrEmpty(response.Content))
+        {
+            throw new Exception("API call returned an empty or null result.");
+        }
+
         return response.Content;
+    }
 
         /*
             EXPLAINING THE METHOD
@@ -26,11 +34,10 @@ public class ApiHelper
                 Previously we used the ExecuteAsync() method when making api calls, now we are using GetAsync() the only advantage of GetAsync() for this is that it will throw an error if the server returns an error to us. This is important if we want to create a robust frontend applicaion,
                 We'll also be using PutAsync(), PostAsync(), DeletAsync()
         */
-    }
 
     public static async Task<string> Get(int id)
     {
-        RestClient client = new RestClient("http://localhost:5181/");
+        RestClient client = new RestClient("http://localhost:5011/");
         RestRequest request = new RestRequest($"api/destinations/{id}", Method.Get);
         RestResponse response = await client.GetAsync(request);
         return response.Content;
@@ -39,7 +46,7 @@ public class ApiHelper
 
     public static async void Post(string newDestination)
     {
-        RestClient client = new RestClient("http://localhost:5181/");
+        RestClient client = new RestClient("http://localhost:5011/");
         RestRequest request = new RestRequest($"api/destinations", Method.Post);
         request.AddHeader("Content-Type", "application/json");
         request.AddJsonBody(newDestination);
@@ -56,7 +63,7 @@ public class ApiHelper
 
     public static async void Put(int id, string newDestination)
     {
-        RestClient client = new RestClient("http://localhost:5181/");
+        RestClient client = new RestClient("http://localhost:5011/");
         RestRequest request = new RestRequest($"api/destinations/{id}", Method.Put);
         request.AddHeader("Content-Type", "application/json");
         request.AddJsonBody(newDestination);
@@ -65,7 +72,7 @@ public class ApiHelper
 
     public static async void Delete(int id)
     {
-        RestClient client = new RestClient("http://localhost:5181/");
+        RestClient client = new RestClient("http://localhost:5011/");
         RestRequest request = new RestRequest($"api/destinations/{id}", Method.Delete);
         request.AddHeader("Content-Type", "application/json");
         await client.DeleteAsync(request);

@@ -35,10 +35,40 @@ public class Destination
         var apiCallTask = ApiHelper.GetAll();
         var result = apiCallTask.Result;
 
-        JArray jsonResponse = JsonConvert.DeserializeObject<JArray>(result);
-        List<Destination> destinationList = JsonConvert.DeserializeObject<List<Destination>>(jsonResponse.ToString());
+        if (string.IsNullOrEmpty(result))
+        {
+            // Handle the case where the API call returned an empty or null result
+            throw new Exception("API call returned an empty or null result.");
+        }
 
-        return destinationList;
+        try
+        {
+            // Log the result to verify the content of the API response
+            Console.WriteLine("API response: " + result);
+
+            // Ensure the result is a valid JSON array
+            JArray jsonResponse = JArray.Parse(result); // Use Parse instead of DeserializeObject for better error handling
+
+            if (jsonResponse == null)
+            {
+                throw new Exception("Deserialization of the API response returned null.");
+            }
+
+            List<Destination> destinationList = jsonResponse.ToObject<List<Destination>>();
+
+            return destinationList;
+        }
+        catch (JsonReaderException jsonEx)
+        {
+            // Catch and handle specific JSON parsing errors
+            throw new Exception("Invalid JSON format in API response: " + jsonEx.Message);
+        }
+        catch (Exception ex)
+        {
+            // Catch any other exceptions that may occur
+            throw new Exception("Error deserializing the API response: " + ex.Message);
+        }
+    }
 
         /*
 
@@ -51,8 +81,6 @@ public class Destination
             Next, let's actually create the ApiHelper class. This class will contain the definition for our ApiHelper.GetAll() method which actually handles making a call to our Travel Api
 
         */
-    }
-
     public static Destination GetDetails(int id)
     {
         var apiCallTask = ApiHelper.Get(id);
