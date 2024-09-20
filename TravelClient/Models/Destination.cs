@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
+using TravelClient.Models;
 
 
 namespace TravelClient.Models;
@@ -31,8 +32,8 @@ public class Destination
 
     public static List<Destination> GetDestinations()
     {
-        var apiTask = ApiHelper.GetAll();
-        var result = apiTask.Result;
+        var apiCallTask = ApiHelper.GetAll();
+        var result = apiCallTask.Result;
 
         JArray jsonResponse = JsonConvert.DeserializeObject<JArray>(result);
         List<Destination> destinationList = JsonConvert.DeserializeObject<List<Destination>>(jsonResponse.ToString());
