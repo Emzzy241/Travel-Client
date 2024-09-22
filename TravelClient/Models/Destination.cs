@@ -18,6 +18,10 @@ public class Destination
 
     [Required]
     public string Country { get; set; }
+
+     
+    [Required]
+    public string City { get; set; }
     
     [Required]
     public string DestinationName { get; set; }

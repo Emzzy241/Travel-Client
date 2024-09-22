@@ -13,7 +13,7 @@ public class ApiHelper
     public static async Task<string> GetAll()
     {
         // Update this to the correct API URL
-        RestClient client = new  RestClient("https://localhost:7220"); // Updated to use HTTPS and correct port
+        RestClient client = new  RestClient("http://localhost:5000/"); // Updated to use HTTPS and correct port
         RestRequest request = new RestRequest($"api/destinations", Method.Get);
         RestResponse response = await client.GetAsync(request);
          // Log the response content
@@ -37,20 +37,36 @@ public class ApiHelper
 
     public static async Task<string> Get(int id)
     {
-        RestClient client = new RestClient("https://localhost:7220");
+        RestClient client = new RestClient("http://localhost:5000/");
         RestRequest request = new RestRequest($"api/destinations/{id}", Method.Get);
         RestResponse response = await client.GetAsync(request);
         return response.Content;
 
     }
 
+    // public static async void Post(string newDestination)
+    // {
+    //     RestClient client = new RestClient("http://localhost:5000/");
+    //     RestRequest request = new RestRequest($"api/destinations", Method.Post);
+    //     request.AddHeader("Content-Type", "application/json");
+    //     request.AddJsonBody(newDestination);
+    //     await client.PostAsync(request);
+
+    // }
+
     public static async void Post(string newDestination)
     {
-        RestClient client = new RestClient("https://localhost:7220");
+        RestClient client = new RestClient("http://localhost:5000/");  // Correct the port and use HTTPS
         RestRequest request = new RestRequest($"api/destinations", Method.Post);
         request.AddHeader("Content-Type", "application/json");
         request.AddJsonBody(newDestination);
-        await client.PostAsync(request);
+        RestResponse response = await client.PostAsync(request);
+
+        if (!response.IsSuccessful)
+        {
+            throw new Exception($"Error: {response.StatusCode} - {response.Content}");
+        }
+    }
 
         /*
             EXPLAINING THE POST
@@ -59,20 +75,34 @@ public class ApiHelper
                         We're also using the PostAsync() method, which will throw on a server error
 
         */
-    }
+
+    // public static async void Put(int id, string newDestination)
+    // {
+    //     RestClient client = new RestClient("http://localhost:5000/");
+    //     RestRequest request = new RestRequest($"api/destinations/{id}", Method.Put);
+    //     request.AddHeader("Content-Type", "application/json");
+    //     request.AddJsonBody(newDestination);
+    //     await client.PutAsync(request);
+    // }
 
     public static async void Put(int id, string newDestination)
     {
-        RestClient client = new RestClient("https://localhost:7220");
+        RestClient client = new RestClient("http://localhost:5000/");  // Ensure correct base URL
         RestRequest request = new RestRequest($"api/destinations/{id}", Method.Put);
         request.AddHeader("Content-Type", "application/json");
-        request.AddJsonBody(newDestination);
-        await client.PutAsync(request);
+        request.AddJsonBody(newDestination);  // Ensure newDestination is serialized properly
+        RestResponse response = await client.PutAsync(request);
+
+        if (!response.IsSuccessful)
+        {
+            throw new Exception($"Error: {response.StatusCode} - {response.Content}");
+        }
     }
+
 
     public static async void Delete(int id)
     {
-        RestClient client = new RestClient("https://localhost:7220");
+        RestClient client = new RestClient("http://localhost:5000/");
         RestRequest request = new RestRequest($"api/destinations/{id}", Method.Delete);
         request.AddHeader("Content-Type", "application/json");
         await client.DeleteAsync(request);
