@@ -54,6 +54,7 @@ public class ApiHelper
 
     // }
 
+/*
     public static async void Post(string newDestination)
     {
         RestClient client = new RestClient("http://localhost:5000/");  // Correct the port and use HTTPS
@@ -66,7 +67,12 @@ public class ApiHelper
         {
             throw new Exception($"Error: {response.StatusCode} - {response.Content}");
         }
+
     }
+
+    */
+        // Something is super broken in the code, and honestly I do nopt even know what that is.....
+        // The Re
 
         /*
             EXPLAINING THE POST
@@ -85,6 +91,7 @@ public class ApiHelper
     //     await client.PutAsync(request);
     // }
 
+/*
     public static async void Put(int id, string newDestination)
     {
         RestClient client = new RestClient("http://localhost:5000/");  // Ensure correct base URL
@@ -98,6 +105,37 @@ public class ApiHelper
             throw new Exception($"Error: {response.StatusCode} - {response.Content}");
         }
     }
+*/
+
+    public static async Task Post(string newDestination)
+    {
+        RestClient client = new RestClient("http://localhost:5000/");  // Correct the port and use HTTPS
+        RestRequest request = new RestRequest($"api/destinations", Method.Post);
+        request.AddHeader("Content-Type", "application/json");
+        request.AddJsonBody(newDestination);
+        RestResponse response = await client.PostAsync(request);
+
+        if (!response.IsSuccessful)
+        {
+            throw new Exception($"Error: {response.StatusCode} - {response.Content}");
+        }
+    }
+
+    public static async Task Put(int id, string newDestination)
+    {
+        RestClient client = new RestClient("http://localhost:5000/");  // Ensure correct base URL
+        RestRequest request = new RestRequest($"api/destinations/{id}", Method.Put);
+        request.AddHeader("Content-Type", "application/json");
+        request.AddJsonBody(newDestination);  // Ensure newDestination is serialized properly
+        RestResponse response = await client.PutAsync(request);
+
+        if (!response.IsSuccessful)
+        {
+            throw new Exception($"Error: {response.StatusCode} - {response.Content}");
+        }
+    }
+
+
 
 
     public static async void Delete(int id)
